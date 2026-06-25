@@ -81,7 +81,6 @@
       });
 
       let nextX = 0;
-      let loadedCount = 0;
       images.forEach((img) => {
         const x = nextX;
         nextX += ITEM_WIDTH + GAP;
@@ -92,10 +91,11 @@
           width: ITEM_WIDTH,
           success: (event) => {
             addCaption(viewer, event.item, img);
-            loadedCount += 1;
-            if (loadedCount === images.length) {
-              viewer.viewport.goHome(true);
-            }
+            // Refit on every successful load (not just the last one) so the view still
+            // frames the whole row even if one image is slow or fails to load - this
+            // matters inside the Wix iframe embed, where loading can behave differently
+            // than viewing the page directly.
+            viewer.viewport.goHome(true);
           },
         });
       });
