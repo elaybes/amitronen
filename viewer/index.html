@@ -14,14 +14,16 @@
   #osd { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
   .caption {
     font-family: system-ui, sans-serif;
-    color: #fff;
+    color: #444;
     text-align: center;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     pointer-events: none;
-    font-size: 0.8rem;
-    line-height: 1.4;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: nowrap;
+    width: max-content;
   }
   .caption .he { direction: rtl; }
+  .caption .dims { opacity: 0.8; }
   #hint { position: absolute; bottom: 10px; right: 14px; font-family: system-ui, sans-serif; font-size: 0.7rem; color: #777; z-index: 10; }
 </style>
 </head>
@@ -57,56 +59,64 @@
 
       const baseUrl = `../exhibitions/${slug}/`;
       const images = config.images || [];
+      const ITEM_WIDTH = 1; // every image is placed 1 world-unit wide, regardless of its own aspect ratio
+      const GAP = 0.15; // gap between images, in the same world units
 
       const viewer = OpenSeadragon({
         id: 'osd',
         prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@4.1/build/openseadragon/images/',
         showNavigationControl: false,
         showFullPageControl: false,
-        collectionMode: true,
-        collectionRows: 1,
-        collectionTileSize: 1,
-        collectionTileMargin: 0.08,
         gestureSettingsMouse: { clickToZoom: false, dragToPan: true },
         gestureSettingsTouch: { pinchToZoom: true, dragToPan: true },
         minZoomImageRatio: 0.6,
         maxZoomPixelRatio: 4,
         visibilityRatio: 0.1,
         constrainDuringPan: false,
-        tileSources: images.map((img) => baseUrl + img.dzi),
       });
 
-      viewer.addHandler('open', () => {
-        addCaptions(viewer, images);
+      let nextX = 0;
+      let loadedCount = 0;
+      images.forEach((img) => {
+        const x = nextX;
+        nextX += ITEM_WIDTH + GAP;
+        viewer.addTiledImage({
+          tileSource: baseUrl + img.dzi,
+          x,
+          y: 0,
+          width: ITEM_WIDTH,
+          success: (event) => {
+            addCaption(viewer, event.item, img);
+            loadedCount += 1;
+            if (loadedCount === images.length) {
+              viewer.viewport.goHome(true);
+            }
+          },
+        });
       });
 
       addKeyboardControls(viewer);
     }
 
-    function addCaptions(viewer, images) {
-      for (let i = 0; i < viewer.world.getItemCount(); i++) {
-        const item = viewer.world.getItemAt(i);
-        const img = images[i];
-        if (!img) continue;
+    function addCaption(viewer, item, img) {
+      const bounds = item.getBounds();
+      const lineEn = [img.caption_en, img.medium_en].filter(Boolean).join(' | ');
+      const lineHe = [img.caption_he, img.medium_he].filter(Boolean).join(' | ');
+      if (!lineEn && !lineHe && !img.dimensions) return;
 
-        const el = document.createElement('div');
-        el.className = 'caption';
-        el.innerHTML = `
-          <div class="en">${escapeHtml([img.caption_en, img.medium_en, img.dimensions].filter(Boolean).join(' | '))}</div>
-          <div class="he">${escapeHtml([img.caption_he, img.medium_he, img.dimensions].filter(Boolean).join(' | '))}</div>
-        `;
+      const el = document.createElement('div');
+      el.className = 'caption';
+      el.innerHTML = `
+        ${lineEn ? `<div class="en">${escapeHtml(lineEn)}</div>` : ''}
+        ${lineHe ? `<div class="he">${escapeHtml(lineHe)}</div>` : ''}
+        ${img.dimensions ? `<div class="dims">${escapeHtml(img.dimensions)}</div>` : ''}
+      `;
 
-        const overlayBounds = item.getBounds();
-        viewer.addOverlay({
-          element: el,
-          location: new OpenSeadragon.Rect(
-            overlayBounds.x,
-            overlayBounds.y + overlayBounds.height + 0.04,
-            overlayBounds.width,
-            overlayBounds.height * 0.18
-          ),
-        });
-      }
+      viewer.addOverlay({
+        element: el,
+        location: new OpenSeadragon.Point(bounds.x + bounds.width / 2, bounds.y + bounds.height + 0.04),
+        placement: OpenSeadragon.Placement.TOP,
+      });
     }
 
     function addKeyboardControls(viewer) {
