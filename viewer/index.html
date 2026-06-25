@@ -28,6 +28,36 @@
   .caption .dims { opacity: 0.8; }
   #hint { position: absolute; bottom: 28px; right: 14px; font-family: system-ui, sans-serif; font-size: 0.7rem; color: #777; z-index: 10; }
   #credit { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-family: system-ui, sans-serif; font-size: 0.65rem; color: #999; z-index: 10; pointer-events: none; }
+
+  #rotateTip {
+    display: none;
+    position: absolute; top: 0; left: 0; right: 0;
+    text-align: center;
+    font-family: system-ui, sans-serif;
+    font-size: 0.7rem;
+    color: #666;
+    background: rgba(255,255,255,0.6);
+    padding: 4px 8px;
+    z-index: 11;
+    pointer-events: none;
+  }
+
+  /* Small screens: scale everything down so the title/subtitle/captions don't
+     dominate the viewport the way they do at desktop font sizes. */
+  @media (max-width: 600px) {
+    #titleBar { top: 10px; }
+    #titleBar h1 { font-size: 0.85rem; }
+    #titleBar .subtitle { font-size: 0.85rem; }
+    .caption { font-size: 9px; line-height: 1.3; }
+    #hint { font-size: 0.55rem; bottom: 20px; }
+    #credit { font-size: 0.5rem; }
+  }
+
+  /* Portrait phones: this viewer is laid out as a wide horizontal row, so it
+     needs landscape orientation to be usable - nudge the visitor to rotate. */
+  @media (max-width: 600px) and (orientation: portrait) {
+    #rotateTip { display: block; }
+  }
 </style>
 </head>
 <body>
@@ -39,6 +69,7 @@
     <div class="subtitle">Amit Ronen | עמית רונן</div>
   </div>
   <div id="osd"></div>
+  <div id="rotateTip">Rotate your device for the best experience &nbsp;|&nbsp; סובבו את המכשיר לרוחב לחוויה הטובה ביותר</div>
   <div id="hint">drag / arrows / pinch / +&minus; to navigate</div>
   <div id="credit">Made by Elad Aybes | Digitizing Art | Evisual Studio</div>
 
