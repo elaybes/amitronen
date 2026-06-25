@@ -11,6 +11,7 @@
   #titleBar h1 { font-family: system-ui, sans-serif; font-weight: 700; font-size: 1.4rem; color: #333; margin: 0; }
   #titleBar .titles { display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap; }
   #titleBar .he { direction: rtl; }
+  #titleBar .subtitle { font-family: system-ui, sans-serif; font-weight: 400; font-size: 1.4rem; color: #333; margin: 0.2rem 0 0 0; }
   #osd { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
   .caption {
     font-family: system-ui, sans-serif;
@@ -18,9 +19,10 @@
     text-align: center;
     pointer-events: none;
     font-size: 13px;
-    line-height: 1.5;
-    white-space: nowrap;
-    width: max-content;
+    line-height: 1.4;
+    box-sizing: border-box;
+    padding: 0 4px;
+    overflow: visible;
   }
   .caption .he { direction: rtl; }
   .caption .dims { opacity: 0.8; }
@@ -28,10 +30,13 @@
 </style>
 </head>
 <body>
-  <div id="titleBar"><div class="titles">
-    <h1 id="titleEn"></h1>
-    <h1 id="titleHe" class="he"></h1>
-  </div></div>
+  <div id="titleBar">
+    <div class="titles">
+      <h1 id="titleEn"></h1>
+      <h1 id="titleHe" class="he"></h1>
+    </div>
+    <div class="subtitle">Amit Ronen | עמית רונן</div>
+  </div>
   <div id="osd"></div>
   <div id="hint">drag / arrows / pinch / +&minus; to navigate</div>
 
@@ -112,10 +117,13 @@
         ${img.dimensions ? `<div class="dims">${escapeHtml(img.dimensions)}</div>` : ''}
       `;
 
+      // The overlay box is sized to the image's own on-screen width, so at low zoom
+      // (box narrow in pixels) captions wrap onto multiple lines and never overlap
+      // their neighbors, while at high zoom (box wide) each line fits on one line.
       viewer.addOverlay({
         element: el,
-        location: new OpenSeadragon.Point(bounds.x + bounds.width / 2, bounds.y + bounds.height + 0.04),
-        placement: OpenSeadragon.Placement.TOP,
+        location: new OpenSeadragon.Rect(bounds.x, bounds.y + bounds.height + 0.04, bounds.width, 0.3),
+        checkResize: true,
       });
     }
 
