@@ -54,9 +54,12 @@
   }
 
   /* Portrait phones: this viewer is laid out as a wide horizontal row, so it
-     needs landscape orientation to be usable - nudge the visitor to rotate. */
+     needs landscape orientation to be usable - nudge the visitor to rotate.
+     The banner sits above the title instead of over it, so the title bar is
+     pushed down to make room. */
   @media (max-width: 600px) and (orientation: portrait) {
     #rotateTip { display: block; }
+    #titleBar { top: 38px; }
   }
 </style>
 </head>
