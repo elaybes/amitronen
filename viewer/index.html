@@ -66,7 +66,7 @@
         collectionMode: true,
         collectionRows: 1,
         collectionTileSize: 1,
-        collectionTileMargin: 80,
+        collectionTileMargin: 0.08,
         gestureSettingsMouse: { clickToZoom: false, dragToPan: true },
         gestureSettingsTouch: { pinchToZoom: true, dragToPan: true },
         minZoomImageRatio: 0.6,
@@ -84,7 +84,6 @@
     }
 
     function addCaptions(viewer, images) {
-      viewer.world.getItemCount() && viewer.world.addHandler('update-viewport', () => {});
       for (let i = 0; i < viewer.world.getItemCount(); i++) {
         const item = viewer.world.getItemAt(i);
         const img = images[i];
