@@ -113,6 +113,7 @@ app.post('/api/exhibitions/:slug/images', upload.single('image'), async (req, re
   const newImage = {
     id: imageId,
     dzi: `tiles/${imageId}.dzi`,
+    preview: `tiles/${imageId}_preview.jpg`,
     caption_en: '',
     caption_he: '',
     medium_en: '',
@@ -137,6 +138,7 @@ app.delete('/api/exhibitions/:slug/images/:imageId', (req, res) => {
   const tilesDir = path.join(EXHIBITIONS_DIR, slug, 'tiles');
   fs.rmSync(path.join(tilesDir, `${imageId}.dzi`), { force: true });
   fs.rmSync(path.join(tilesDir, `${imageId}_files`), { recursive: true, force: true });
+  fs.rmSync(path.join(tilesDir, `${imageId}_preview.jpg`), { force: true });
 
   res.json({ ok: true });
 });

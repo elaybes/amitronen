@@ -21,8 +21,14 @@ async function generateTiles(sourcePath, outDir, imageId) {
     })
     .toFile(dziBasePath);
 
+  // DZI pyramid level 0 is near-1px (it's the top of the pyramid, not a thumbnail),
+  // so generate a real small preview for admin UI thumbnails and any non-OSD use.
+  const previewPath = path.join(outDir, `${imageId}_preview.jpg`);
+  await sharp(sourcePath).resize({ width: 300 }).jpeg({ quality: 80 }).toFile(previewPath);
+
   return {
     dziUrl: `${imageId}.dzi`,
+    previewUrl: `${imageId}_preview.jpg`,
   };
 }
 

@@ -9,7 +9,8 @@
       "caption_he": "",
       "medium_en": "",
       "medium_he": "",
-      "dimensions": ""
+      "dimensions": "",
+      "preview": "tiles/3dc4ee98-e260-495c-916d-49b82b2576ca_preview.jpg"
     },
     {
       "id": "67a9a3f3-e746-4b8e-92fa-95f4b6967a68",
@@ -18,7 +19,8 @@
       "caption_he": "",
       "medium_en": "",
       "medium_he": "",
-      "dimensions": ""
+      "dimensions": "",
+      "preview": "tiles/67a9a3f3-e746-4b8e-92fa-95f4b6967a68_preview.jpg"
     },
     {
       "id": "7d11e9f5-553d-46f8-be6d-9fd158467f65",
@@ -27,7 +29,118 @@
       "caption_he": "",
       "medium_en": "",
       "medium_he": "",
-      "dimensions": ""
+      "dimensions": "",
+      "preview": "tiles/7d11e9f5-553d-46f8-be6d-9fd158467f65_preview.jpg"
+    },
+    {
+      "id": "e662dbd5-e782-4a6a-819f-c1bc3f4dd887",
+      "dzi": "tiles/e662dbd5-e782-4a6a-819f-c1bc3f4dd887.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/e662dbd5-e782-4a6a-819f-c1bc3f4dd887_preview.jpg"
+    },
+    {
+      "id": "58def8b0-13e6-4a62-b6fe-c658d604804b",
+      "dzi": "tiles/58def8b0-13e6-4a62-b6fe-c658d604804b.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/58def8b0-13e6-4a62-b6fe-c658d604804b_preview.jpg"
+    },
+    {
+      "id": "4d1202a9-6e72-4ef8-8f4a-a167682e04e7",
+      "dzi": "tiles/4d1202a9-6e72-4ef8-8f4a-a167682e04e7.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/4d1202a9-6e72-4ef8-8f4a-a167682e04e7_preview.jpg"
+    },
+    {
+      "id": "7cdcb6b7-0816-42f5-97c7-895f93307642",
+      "dzi": "tiles/7cdcb6b7-0816-42f5-97c7-895f93307642.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/7cdcb6b7-0816-42f5-97c7-895f93307642_preview.jpg"
+    },
+    {
+      "id": "3eee0af2-06f0-4814-86be-164d0453b6a1",
+      "dzi": "tiles/3eee0af2-06f0-4814-86be-164d0453b6a1.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/3eee0af2-06f0-4814-86be-164d0453b6a1_preview.jpg"
+    },
+    {
+      "id": "13ed30fe-3f13-4704-9af6-40b65d670596",
+      "dzi": "tiles/13ed30fe-3f13-4704-9af6-40b65d670596.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/13ed30fe-3f13-4704-9af6-40b65d670596_preview.jpg"
+    },
+    {
+      "id": "c85b5fd3-bc10-4578-b6f2-826dc5a9f238",
+      "dzi": "tiles/c85b5fd3-bc10-4578-b6f2-826dc5a9f238.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/c85b5fd3-bc10-4578-b6f2-826dc5a9f238_preview.jpg"
+    },
+    {
+      "id": "f0bea9d2-72e4-475b-8970-520ed468eb06",
+      "dzi": "tiles/f0bea9d2-72e4-475b-8970-520ed468eb06.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/f0bea9d2-72e4-475b-8970-520ed468eb06_preview.jpg"
+    },
+    {
+      "id": "4f84f7f3-68a8-4296-b45b-84dc76fec05f",
+      "dzi": "tiles/4f84f7f3-68a8-4296-b45b-84dc76fec05f.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/4f84f7f3-68a8-4296-b45b-84dc76fec05f_preview.jpg"
+    },
+    {
+      "id": "74d62820-9327-4e70-85cc-91a66418093a",
+      "dzi": "tiles/74d62820-9327-4e70-85cc-91a66418093a.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/74d62820-9327-4e70-85cc-91a66418093a_preview.jpg"
+    },
+    {
+      "id": "03c8c8ae-e8b3-46e5-b5ef-4611a85c3f5e",
+      "dzi": "tiles/03c8c8ae-e8b3-46e5-b5ef-4611a85c3f5e.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "preview": "tiles/03c8c8ae-e8b3-46e5-b5ef-4611a85c3f5e_preview.jpg"
     }
   ]
 }
