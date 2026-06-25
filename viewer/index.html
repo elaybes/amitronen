@@ -35,12 +35,14 @@
     text-align: center;
     font-family: system-ui, sans-serif;
     font-size: 0.7rem;
+    line-height: 1.4;
     color: #666;
     background: rgba(255,255,255,0.6);
     padding: 4px 8px;
     z-index: 11;
     pointer-events: none;
   }
+  #rotateTip .he { direction: rtl; }
 
   /* Small screens: scale everything down so the title/subtitle/captions don't
      dominate the viewport the way they do at desktop font sizes. */
@@ -59,7 +61,7 @@
      pushed down to make room. */
   @media (max-width: 600px) and (orientation: portrait) {
     #rotateTip { display: block; }
-    #titleBar { top: 38px; }
+    #titleBar { top: 46px; }
   }
 </style>
 </head>
@@ -72,7 +74,10 @@
     <div class="subtitle">Amit Ronen | עמית רונן</div>
   </div>
   <div id="osd"></div>
-  <div id="rotateTip">Rotate your device for the best experience &nbsp;|&nbsp; סובבו את המכשיר לרוחב לחוויה הטובה ביותר</div>
+  <div id="rotateTip">
+    <div class="en">Rotate your device for the best experience</div>
+    <div class="he">סובבו את המכשיר לרוחב לחוויה הטובה ביותר</div>
+  </div>
   <div id="hint">drag / arrows / pinch / +&minus; to navigate</div>
   <div id="credit">Made by Elad Aybes | Digitizing Art | Evisual Studio</div>
 
