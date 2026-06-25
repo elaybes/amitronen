@@ -17,13 +17,13 @@ function run(cmd, args) {
 }
 
 /**
- * Stages the site/ folder, commits, and pushes using whatever git
+ * Stages the viewer/ and exhibitions/ folders, commits, and pushes using whatever git
  * identity/SSH credentials are already configured on this machine.
  * Returns { pushed: true } on success, or { pushed: false, reason }
  * if there was nothing to commit or no remote is configured yet.
  */
 async function publishToGit(commitMessage) {
-  await run('git', ['add', 'site']);
+  await run('git', ['add', 'viewer', 'exhibitions']);
 
   const { stdout: statusOut } = await run('git', ['status', '--porcelain']);
   if (!statusOut.trim()) {

@@ -7,8 +7,8 @@ const { generateTiles } = require('./lib/tiler');
 const { publishToGit } = require('./lib/publish');
 
 const REPO_ROOT = path.join(__dirname, '..');
-const SITE_DIR = path.join(REPO_ROOT, 'site');
-const EXHIBITIONS_DIR = path.join(SITE_DIR, 'exhibitions');
+const EXHIBITIONS_DIR = path.join(REPO_ROOT, 'exhibitions');
+const VIEWER_DIR = path.join(REPO_ROOT, 'viewer');
 const UPLOAD_TMP_DIR = path.join(__dirname, 'uploads');
 
 fs.mkdirSync(EXHIBITIONS_DIR, { recursive: true });
@@ -17,7 +17,10 @@ fs.mkdirSync(UPLOAD_TMP_DIR, { recursive: true });
 const app = express();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/site', express.static(SITE_DIR)); // lets the admin UI preview via the real viewer
+// lets the admin UI preview via the real viewer + read tile thumbnails, at the same
+// paths they'll have once published (root-level /viewer and /exhibitions on GitHub Pages)
+app.use('/viewer', express.static(VIEWER_DIR));
+app.use('/exhibitions', express.static(EXHIBITIONS_DIR));
 
 const upload = multer({ dest: UPLOAD_TMP_DIR });
 

@@ -56,7 +56,7 @@
     }
 
     function refreshPreview() {
-      document.getElementById('preview').src = `/site/viewer/index.html?exhibition=${encodeURIComponent(slug)}&t=${Date.now()}`;
+      document.getElementById('preview').src = `/viewer/index.html?exhibition=${encodeURIComponent(slug)}&t=${Date.now()}`;
     }
 
     function renderImages() {
@@ -68,7 +68,7 @@
         card.draggable = true;
         card.dataset.index = idx;
         card.innerHTML = `
-          <img class="thumb" src="/site/exhibitions/${slug}/tiles/${img.id}_files/0/0_0.jpeg" onerror="this.style.display='none'" />
+          <img class="thumb" src="/exhibitions/${slug}/tiles/${img.id}_files/0/0_0.jpeg" onerror="this.style.display='none'" />
           <div class="fields">
             <input type="text" placeholder="Caption (English)" value="${escapeHtml(img.caption_en)}" data-field="caption_en" />
             <input type="text" placeholder="כיתוב (עברית)" dir="rtl" value="${escapeHtml(img.caption_he)}" data-field="caption_he" />
