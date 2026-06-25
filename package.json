@@ -1,0 +1,15 @@
+{
+  "name": "amitronen-exhibitions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local admin tool + static deep-zoom viewer for exhibition landing pages embedded in Wix.",
+  "scripts": {
+    "admin": "node admin/server.js",
+    "serve-site": "npx --yes serve site -l 5050"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^2.0.1",
+    "sharp": "^0.33.5"
+  }
+}

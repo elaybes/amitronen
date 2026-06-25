@@ -1,0 +1,33 @@
+{
+  "title_en": "Pushing a Mountain",
+  "title_he": "לדחוף הר",
+  "images": [
+    {
+      "id": "3dc4ee98-e260-495c-916d-49b82b2576ca",
+      "dzi": "tiles/3dc4ee98-e260-495c-916d-49b82b2576ca.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": ""
+    },
+    {
+      "id": "67a9a3f3-e746-4b8e-92fa-95f4b6967a68",
+      "dzi": "tiles/67a9a3f3-e746-4b8e-92fa-95f4b6967a68.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": ""
+    },
+    {
+      "id": "7d11e9f5-553d-46f8-be6d-9fd158467f65",
+      "dzi": "tiles/7d11e9f5-553d-46f8-be6d-9fd158467f65.dzi",
+      "caption_en": "",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": ""
+    }
+  ]
+}

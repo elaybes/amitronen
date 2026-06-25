@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Exhibition Admin</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.4rem; }
+  .row { display: flex; gap: 0.5rem; align-items: center; margin: 0.5rem 0; }
+  input[type=text] { flex: 1; padding: 0.4rem; }
+  ul#list { list-style: none; padding: 0; }
+  ul#list li { padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center; }
+  a.button, button { cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 6px; border: 1px solid #888; background: #fafafa; text-decoration: none; color: #222; }
+  button.primary { background: #2d6cdf; color: white; border-color: #2d6cdf; }
+</style>
+</head>
+<body>
+  <h1>Exhibition Admin</h1>
+
+  <section>
+    <h2>New exhibition</h2>
+    <div class="row">
+      <input type="text" id="newTitleEn" placeholder="Title (English)" />
+      <input type="text" id="newTitleHe" placeholder="כותרת (עברית)" dir="rtl" />
+      <button class="primary" id="createBtn">Create</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Exhibitions</h2>
+    <ul id="list"></ul>
+  </section>
+
+  <script>
+    async function loadList() {
+      const res = await fetch('/api/exhibitions');
+      const exhibitions = await res.json();
+      const list = document.getElementById('list');
+      list.innerHTML = '';
+      exhibitions.forEach((ex) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span><strong>${ex.title_en || ex.title_he}</strong> — ${ex.imageCount} image(s)</span>
+          <a class="button" href="/edit.html?slug=${encodeURIComponent(ex.slug)}">Edit</a>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById('createBtn').addEventListener('click', async () => {
+      const title_en = document.getElementById('newTitleEn').value;
+      const title_he = document.getElementById('newTitleHe').value;
+      if (!title_en && !title_he) return alert('Enter a title');
+      const res = await fetch('/api/exhibitions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title_en, title_he }),
+      });
+      const data = await res.json();
+      if (!res.ok) return alert(data.error || 'Failed to create');
+      window.location.href = `/edit.html?slug=${encodeURIComponent(data.slug)}`;
+    });
+
+    loadList();
+  </script>
+</body>
+</html>

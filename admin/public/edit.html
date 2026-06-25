@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Edit Exhibition</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.4rem; }
+  .row { display: flex; gap: 0.5rem; align-items: center; margin: 0.5rem 0; }
+  input[type=text] { flex: 1; padding: 0.4rem; }
+  button { cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 6px; border: 1px solid #888; background: #fafafa; }
+  button.primary { background: #2d6cdf; color: white; border-color: #2d6cdf; }
+  button.danger { background: #d33; color: white; border-color: #d33; }
+  #imageList { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem; }
+  .imgCard { display: flex; gap: 1rem; border: 1px solid #ddd; border-radius: 8px; padding: 0.6rem; cursor: grab; background: #fff; }
+  .imgCard.dragging { opacity: 0.4; }
+  .imgCard .thumb { width: 100px; height: 100px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+  .imgCard .fields { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .imgCard .fields input { width: 100%; padding: 0.3rem; box-sizing: border-box; }
+  .imgCard .fields input[dir=rtl] { text-align: right; }
+  #status { margin-top: 1rem; font-size: 0.9rem; color: #555; }
+  iframe#preview { width: 100%; height: 400px; border: 1px solid #ccc; margin-top: 1rem; }
+</style>
+</head>
+<body>
+  <p><a href="/index.html">&larr; All exhibitions</a></p>
+  <h1>Edit exhibition</h1>
+
+  <div class="row">
+    <input type="text" id="titleEn" placeholder="Title (English)" />
+    <input type="text" id="titleHe" placeholder="כותרת (עברית)" dir="rtl" />
+  </div>
+
+  <div class="row">
+    <input type="file" id="fileInput" accept="image/*" multiple />
+    <button id="uploadBtn">Upload image(s)</button>
+  </div>
+
+  <div id="imageList"></div>
+
+  <div class="row" style="margin-top:1rem;">
+    <button class="primary" id="saveBtn">Save</button>
+    <button class="primary" id="publishBtn">Save &amp; Publish</button>
+  </div>
+  <div id="status"></div>
+
+  <h2>Preview</h2>
+  <iframe id="preview"></iframe>
+
+  <script>
+    const slug = new URLSearchParams(window.location.search).get('slug');
+    let images = [];
+
+    function setStatus(text) {
+      document.getElementById('status').textContent = text;
+    }
+
+    function refreshPreview() {
+      document.getElementById('preview').src = `/site/viewer/index.html?exhibition=${encodeURIComponent(slug)}&t=${Date.now()}`;
+    }
+
+    function renderImages() {
+      const list = document.getElementById('imageList');
+      list.innerHTML = '';
+      images.forEach((img, idx) => {
+        const card = document.createElement('div');
+        card.className = 'imgCard';
+        card.draggable = true;
+        card.dataset.index = idx;
+        card.innerHTML = `
+          <img class="thumb" src="/site/exhibitions/${slug}/tiles/${img.id}_files/0/0_0.jpeg" onerror="this.style.display='none'" />
+          <div class="fields">
+            <input type="text" placeholder="Caption (English)" value="${escapeHtml(img.caption_en)}" data-field="caption_en" />
+            <input type="text" placeholder="כיתוב (עברית)" dir="rtl" value="${escapeHtml(img.caption_he)}" data-field="caption_he" />
+            <input type="text" placeholder="Medium (English)" value="${escapeHtml(img.medium_en)}" data-field="medium_en" />
+            <input type="text" placeholder="טכניקה (עברית)" dir="rtl" value="${escapeHtml(img.medium_he)}" data-field="medium_he" />
+            <input type="text" placeholder="Dimensions e.g. 150x115" value="${escapeHtml(img.dimensions)}" data-field="dimensions" style="grid-column: 1 / -1;" />
+          </div>
+          <button class="danger" data-remove="${img.id}">Remove</button>
+        `;
+        list.appendChild(card);
+      });
+
+      list.querySelectorAll('input').forEach((input) => {
+        input.addEventListener('input', (e) => {
+          const idx = e.target.closest('.imgCard').dataset.index;
+          images[idx][e.target.dataset.field] = e.target.value;
+        });
+      });
+
+      list.querySelectorAll('button[data-remove]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const imageId = btn.dataset.remove;
+          await fetch(`/api/exhibitions/${slug}/images/${imageId}`, { method: 'DELETE' });
+          images = images.filter((i) => i.id !== imageId);
+          renderImages();
+          refreshPreview();
+        });
+      });
+
+      // drag to reorder
+      let dragSrcIdx = null;
+      list.querySelectorAll('.imgCard').forEach((card) => {
+        card.addEventListener('dragstart', () => {
+          dragSrcIdx = Number(card.dataset.index);
+          card.classList.add('dragging');
+        });
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        card.addEventListener('dragover', (e) => e.preventDefault());
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const targetIdx = Number(card.dataset.index);
+          if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+          const [moved] = images.splice(dragSrcIdx, 1);
+          images.splice(targetIdx, 0, moved);
+          renderImages();
+        });
+      });
+    }
+
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+
+    async function load() {
+      const res = await fetch(`/api/exhibitions/${slug}`);
+      const cfg = await res.json();
+      document.getElementById('titleEn').value = cfg.title_en || '';
+      document.getElementById('titleHe').value = cfg.title_he || '';
+      images = cfg.images || [];
+      renderImages();
+      refreshPreview();
+    }
+
+    async function persist() {
+      const title_en = document.getElementById('titleEn').value;
+      const title_he = document.getElementById('titleHe').value;
+      await fetch(`/api/exhibitions/${slug}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title_en, title_he, images }),
+      });
+    }
+
+    document.getElementById('uploadBtn').addEventListener('click', async () => {
+      const files = document.getElementById('fileInput').files;
+      if (!files.length) return;
+      setStatus(`Uploading and tiling ${files.length} image(s)... this can take a moment for large photos.`);
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch(`/api/exhibitions/${slug}/images`, { method: 'POST', body: formData });
+        const newImage = await res.json();
+        if (!res.ok) { setStatus(`Failed: ${newImage.error}`); continue; }
+        images.push(newImage);
+      }
+      document.getElementById('fileInput').value = '';
+      renderImages();
+      refreshPreview();
+      setStatus('Done uploading. Remember to Save & Publish.');
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      await persist();
+      setStatus('Saved locally.');
+      refreshPreview();
+    });
+
+    document.getElementById('publishBtn').addEventListener('click', async () => {
+      await persist();
+      setStatus('Publishing to GitHub...');
+      const res = await fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: `Update exhibition: ${slug}` }),
+      });
+      const result = await res.json();
+      if (result.pushed) setStatus('Published! Live on GitHub Pages shortly.');
+      else if (result.reason === 'nothing-to-commit') setStatus('Nothing new to publish.');
+      else setStatus(`Publish failed: ${result.detail || result.reason}`);
+    });
+
+    load();
+  </script>
+</body>
+</html>

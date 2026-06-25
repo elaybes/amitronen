@@ -1,0 +1,5 @@
+node_modules/
+admin/uploads/*
+!admin/uploads/.gitkeep
+samples/
+.claude/

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exhibition</title>
+<script src="https://cdn.jsdelivr.net/npm/openseadragon@4.1/build/openseadragon/openseadragon.min.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: linear-gradient(180deg, #cfcfcf 0%, #f4f4f4 50%, #cfcfcf 100%); }
+  #titleBar { position: absolute; top: 24px; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; }
+  #titleBar h1 { font-family: system-ui, sans-serif; font-weight: 700; font-size: 1.4rem; color: #333; margin: 0; }
+  #titleBar .titles { display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  #titleBar .he { direction: rtl; }
+  #osd { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+  .caption {
+    font-family: system-ui, sans-serif;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    pointer-events: none;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  .caption .he { direction: rtl; }
+  #hint { position: absolute; bottom: 10px; right: 14px; font-family: system-ui, sans-serif; font-size: 0.7rem; color: #777; z-index: 10; }
+</style>
+</head>
+<body>
+  <div id="titleBar"><div class="titles">
+    <h1 id="titleEn"></h1>
+    <h1 id="titleHe" class="he"></h1>
+  </div></div>
+  <div id="osd"></div>
+  <div id="hint">drag / arrows / pinch / +&minus; to navigate</div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('exhibition');
+    const statusEl = document.getElementById('osd');
+
+    if (!slug) {
+      statusEl.innerHTML = '<p style="font-family:system-ui;text-align:center;margin-top:2rem;">Missing ?exhibition= parameter</p>';
+    } else {
+      loadExhibition(slug);
+    }
+
+    async function loadExhibition(slug) {
+      const res = await fetch(`../exhibitions/${slug}/config.json`);
+      if (!res.ok) {
+        statusEl.innerHTML = '<p style="font-family:system-ui;text-align:center;margin-top:2rem;">Exhibition not found</p>';
+        return;
+      }
+      const config = await res.json();
+      document.getElementById('titleEn').textContent = config.title_en || '';
+      document.getElementById('titleHe').textContent = config.title_he || '';
+      document.title = config.title_en || config.title_he || 'Exhibition';
+
+      const baseUrl = `../exhibitions/${slug}/`;
+      const images = config.images || [];
+
+      const viewer = OpenSeadragon({
+        id: 'osd',
+        prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@4.1/build/openseadragon/images/',
+        showNavigationControl: false,
+        showFullPageControl: false,
+        collectionMode: true,
+        collectionRows: 1,
+        collectionTileSize: 1,
+        collectionTileMargin: 80,
+        gestureSettingsMouse: { clickToZoom: false, dragToPan: true },
+        gestureSettingsTouch: { pinchToZoom: true, dragToPan: true },
+        minZoomImageRatio: 0.6,
+        maxZoomPixelRatio: 4,
+        visibilityRatio: 0.1,
+        constrainDuringPan: false,
+        tileSources: images.map((img) => baseUrl + img.dzi),
+      });
+
+      viewer.addHandler('open', () => {
+        addCaptions(viewer, images);
+      });
+
+      addKeyboardControls(viewer);
+    }
+
+    function addCaptions(viewer, images) {
+      viewer.world.getItemCount() && viewer.world.addHandler('update-viewport', () => {});
+      for (let i = 0; i < viewer.world.getItemCount(); i++) {
+        const item = viewer.world.getItemAt(i);
+        const img = images[i];
+        if (!img) continue;
+
+        const el = document.createElement('div');
+        el.className = 'caption';
+        el.innerHTML = `
+          <div class="en">${escapeHtml([img.caption_en, img.medium_en, img.dimensions].filter(Boolean).join(' | '))}</div>
+          <div class="he">${escapeHtml([img.caption_he, img.medium_he, img.dimensions].filter(Boolean).join(' | '))}</div>
+        `;
+
+        const overlayBounds = item.getBounds();
+        viewer.addOverlay({
+          element: el,
+          location: new OpenSeadragon.Rect(
+            overlayBounds.x,
+            overlayBounds.y + overlayBounds.height + 0.04,
+            overlayBounds.width,
+            overlayBounds.height * 0.18
+          ),
+        });
+      }
+    }
+
+    function addKeyboardControls(viewer) {
+      const PAN_STEP = 0.08;
+      const ZOOM_FACTOR = 1.25;
+      window.addEventListener('keydown', (e) => {
+        const viewport = viewer.viewport;
+        switch (e.key) {
+          case 'ArrowLeft':
+            viewport.panBy(new OpenSeadragon.Point(-PAN_STEP * viewport.getBounds().width, 0));
+            break;
+          case 'ArrowRight':
+            viewport.panBy(new OpenSeadragon.Point(PAN_STEP * viewport.getBounds().width, 0));
+            break;
+          case 'ArrowUp':
+            viewport.panBy(new OpenSeadragon.Point(0, -PAN_STEP * viewport.getBounds().height));
+            break;
+          case 'ArrowDown':
+            viewport.panBy(new OpenSeadragon.Point(0, PAN_STEP * viewport.getBounds().height));
+            break;
+          case '+':
+          case '=':
+            viewport.zoomBy(ZOOM_FACTOR);
+            break;
+          case '-':
+          case '_':
+            viewport.zoomBy(1 / ZOOM_FACTOR);
+            break;
+          default:
+            return;
+        }
+        viewport.applyConstraints();
+        e.preventDefault();
+      });
+    }
+
+    function escapeHtml(s) {
+      return (s || '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+  </script>
+</body>
+</html>
