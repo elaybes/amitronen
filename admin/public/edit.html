@@ -36,6 +36,12 @@
       Curator mode — גלריה לאוצרים (ללא כותרת/שמות, מרווחים גדולים, אותיות A B C במקום כיתובים)
     </label>
   </div>
+  <div class="row" style="margin-top:0.2rem;">
+    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.9rem;">
+      <input type="checkbox" id="showRotateTip" />
+      הצג טיפ "סובבו את המסך" בנייד (Rotate tip)
+    </label>
+  </div>
 
   <div class="row">
     <input type="file" id="fileInput" accept="image/*" multiple />
@@ -157,6 +163,7 @@
       document.getElementById('titleEn').value = cfg.title_en || '';
       document.getElementById('titleHe').value = cfg.title_he || '';
       document.getElementById('curatorMode').checked = !!cfg.curator_mode;
+      document.getElementById('showRotateTip').checked = cfg.show_rotate_tip !== false; // default true
       images = cfg.images || [];
       renderImages();
       refreshPreview();
@@ -166,10 +173,11 @@
       const title_en = document.getElementById('titleEn').value;
       const title_he = document.getElementById('titleHe').value;
       const curator_mode = document.getElementById('curatorMode').checked;
+      const show_rotate_tip = document.getElementById('showRotateTip').checked;
       await fetch(`/api/exhibitions/${slug}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title_en, title_he, curator_mode, images }),
+        body: JSON.stringify({ title_en, title_he, curator_mode, show_rotate_tip, images }),
       });
     }
 

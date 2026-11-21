@@ -116,6 +116,9 @@
       if (curatorMode) {
         document.getElementById('titleBar').style.display = 'none';
       }
+      if (config.show_rotate_tip === false) {
+        document.getElementById('rotateTip').style.display = 'none';
+      }
 
       const baseUrl = `../exhibitions/${slug}/`;
       const images = config.images || [];

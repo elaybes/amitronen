@@ -87,8 +87,8 @@ app.get('/api/exhibitions/:slug', (req, res) => {
 app.put('/api/exhibitions/:slug', (req, res) => {
   const { slug } = req.params;
   if (!readConfig(slug)) return res.status(404).json({ error: 'not found' });
-  const { title_en, title_he, curator_mode, images } = req.body;
-  writeConfig(slug, { title_en, title_he, curator_mode: !!curator_mode, images });
+  const { title_en, title_he, curator_mode, show_rotate_tip, images } = req.body;
+  writeConfig(slug, { title_en, title_he, curator_mode: !!curator_mode, show_rotate_tip: show_rotate_tip !== false, images });
   res.json({ ok: true });
 });
 
