@@ -158,7 +158,7 @@
       const bounds = item.getBounds();
 
       if (curatorMode) {
-        const letter = String.fromCharCode(65 + idx); // A, B, C...
+        const letter = img.curator_label || String.fromCharCode(65 + idx); // custom label or A, B, C...
         const el = document.createElement('div');
         el.className = 'caption caption-curator';
         el.textContent = letter;

@@ -119,6 +119,7 @@ app.post('/api/exhibitions/:slug/images', upload.single('image'), async (req, re
     medium_en: '',
     medium_he: '',
     dimensions: '',
+    curator_label: '',
   };
   cfg.images.push(newImage);
   writeConfig(slug, cfg);

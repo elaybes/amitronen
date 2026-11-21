@@ -81,6 +81,7 @@
             <input type="text" placeholder="Medium (English)" value="${escapeHtml(img.medium_en)}" data-field="medium_en" />
             <input type="text" placeholder="טכניקה (עברית)" dir="rtl" value="${escapeHtml(img.medium_he)}" data-field="medium_he" />
             <input type="text" placeholder="Dimensions e.g. 150x115" value="${escapeHtml(img.dimensions)}" data-field="dimensions" style="grid-column: 1 / -1;" />
+            <input type="text" placeholder="Curator label (e.g. A, B, C…)" value="${escapeHtml(img.curator_label)}" data-field="curator_label" style="grid-column: 1 / -1; font-style: italic; color: #888;" />
           </div>
           <button class="danger" data-remove="${img.id}">Remove</button>
         `;
