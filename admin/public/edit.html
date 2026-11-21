@@ -30,6 +30,12 @@
     <input type="text" id="titleEn" placeholder="Title (English)" />
     <input type="text" id="titleHe" placeholder="כותרת (עברית)" dir="rtl" />
   </div>
+  <div class="row" style="margin-top:0.3rem;">
+    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.9rem;">
+      <input type="checkbox" id="curatorMode" />
+      Curator mode — גלריה לאוצרים (ללא כותרת/שמות, מרווחים גדולים, אותיות A B C במקום כיתובים)
+    </label>
+  </div>
 
   <div class="row">
     <input type="file" id="fileInput" accept="image/*" multiple />
@@ -127,6 +133,7 @@
       const cfg = await res.json();
       document.getElementById('titleEn').value = cfg.title_en || '';
       document.getElementById('titleHe').value = cfg.title_he || '';
+      document.getElementById('curatorMode').checked = !!cfg.curator_mode;
       images = cfg.images || [];
       renderImages();
       refreshPreview();
@@ -135,10 +142,11 @@
     async function persist() {
       const title_en = document.getElementById('titleEn').value;
       const title_he = document.getElementById('titleHe').value;
+      const curator_mode = document.getElementById('curatorMode').checked;
       await fetch(`/api/exhibitions/${slug}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title_en, title_he, images }),
+        body: JSON.stringify({ title_en, title_he, curator_mode, images }),
       });
     }
 

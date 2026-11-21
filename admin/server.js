@@ -72,7 +72,7 @@ app.post('/api/exhibitions', (req, res) => {
   if (!slug) return res.status(400).json({ error: 'could not derive a slug' });
   if (readConfig(slug)) return res.status(409).json({ error: 'exhibition already exists', slug });
 
-  writeConfig(slug, { title_en: title_en || '', title_he: title_he || '', images: [] });
+  writeConfig(slug, { title_en: title_en || '', title_he: title_he || '', curator_mode: false, images: [] });
   res.json({ slug });
 });
 
@@ -87,8 +87,8 @@ app.get('/api/exhibitions/:slug', (req, res) => {
 app.put('/api/exhibitions/:slug', (req, res) => {
   const { slug } = req.params;
   if (!readConfig(slug)) return res.status(404).json({ error: 'not found' });
-  const { title_en, title_he, images } = req.body;
-  writeConfig(slug, { title_en, title_he, images });
+  const { title_en, title_he, curator_mode, images } = req.body;
+  writeConfig(slug, { title_en, title_he, curator_mode: !!curator_mode, images });
   res.json({ ok: true });
 });
 

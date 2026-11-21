@@ -7,6 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/openseadragon@4.1/build/openseadragon/openseadragon.min.js"></script>
 <style>
   html, body { margin: 0; height: 100%; overflow: hidden; background: linear-gradient(180deg, #cfcfcf 0%, #f4f4f4 50%, #cfcfcf 100%); }
+  @supports (height: 100dvh) { html, body { height: 100dvh; } }
   #titleBar { position: absolute; top: 24px; left: 0; right: 0; text-align: center; z-index: 10; pointer-events: none; }
   #titleBar h1 { font-family: system-ui, sans-serif; font-weight: 700; font-size: 1.4rem; color: #333; margin: 0; }
   #titleBar .titles { display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap; }
@@ -26,6 +27,14 @@
   }
   .caption .he { direction: rtl; }
   .caption .dims { opacity: 0.8; }
+  .caption-curator {
+    font-family: system-ui, sans-serif;
+    color: #aaa;
+    text-align: center;
+    pointer-events: none;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
   #hint { position: absolute; bottom: 28px; right: 14px; font-family: system-ui, sans-serif; font-size: 0.7rem; color: #777; z-index: 10; }
   #credit { position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; font-family: system-ui, sans-serif; font-size: 0.65rem; color: #999; z-index: 10; pointer-events: none; }
 
@@ -103,10 +112,15 @@
       document.getElementById('titleHe').textContent = config.title_he || '';
       document.title = config.title_en || config.title_he || 'Exhibition';
 
+      const curatorMode = !!config.curator_mode;
+      if (curatorMode) {
+        document.getElementById('titleBar').style.display = 'none';
+      }
+
       const baseUrl = `../exhibitions/${slug}/`;
       const images = config.images || [];
       const ITEM_WIDTH = 1; // every image is placed 1 world-unit wide, regardless of its own aspect ratio
-      const GAP = 0.15; // gap between images, in the same world units
+      const GAP = curatorMode ? 2.0 : 0.15; // curator mode: large gap so adjacent paintings aren't visible
 
       const viewer = OpenSeadragon({
         id: 'osd',
@@ -122,7 +136,7 @@
       });
 
       let nextX = 0;
-      images.forEach((img) => {
+      images.forEach((img, idx) => {
         const x = nextX;
         nextX += ITEM_WIDTH + GAP;
         viewer.addTiledImage({
@@ -131,21 +145,43 @@
           y: 0,
           width: ITEM_WIDTH,
           success: (event) => {
-            addCaption(viewer, event.item, img);
-            // Refit on every successful load (not just the last one) so the view still
-            // frames the whole row even if one image is slow or fails to load - this
-            // matters inside the Wix iframe embed, where loading can behave differently
-            // than viewing the page directly.
-            viewer.viewport.goHome(true);
-          },
+            addCaption(viewer, event.item, img, idx, curatorMode);
+            if (curatorMode) {
+              if (idx === 0) {
+                // Fit viewport to the first painting with comfortable margins
+                const b = event.item.getBounds();
+                const hm = b.width * 0.3;
+                const vm = b.height * 0.15;
+                viewer.viewport.fitBounds(
+                  new OpenSeadragon.Rect(b.x - hm, b.y - vm, b.width + hm * 2, b.height + vm * 2),
+                  true
+                );
+              }
+            } else {
+              viewer.viewport.goHome(true);
+            }
         });
       });
 
       addKeyboardControls(viewer);
     }
 
-    function addCaption(viewer, item, img) {
+    function addCaption(viewer, item, img, idx, curatorMode) {
       const bounds = item.getBounds();
+
+      if (curatorMode) {
+        const letter = String.fromCharCode(65 + idx); // A, B, C...
+        const el = document.createElement('div');
+        el.className = 'caption caption-curator';
+        el.textContent = letter;
+        viewer.addOverlay({
+          element: el,
+          location: new OpenSeadragon.Rect(bounds.x, bounds.y + bounds.height + 0.06, bounds.width, 0.15),
+          checkResize: true,
+        });
+        return;
+      }
+
       const lineEn = [img.caption_en, img.medium_en].filter(Boolean).join(' | ');
       const lineHe = [img.caption_he, img.medium_he].filter(Boolean).join(' | ');
       if (!lineEn && !lineHe && !img.dimensions) return;
@@ -158,9 +194,6 @@
         ${img.dimensions ? `<div class="dims">${escapeHtml(img.dimensions)}</div>` : ''}
       `;
 
-      // The overlay box is sized to the image's own on-screen width, so at low zoom
-      // (box narrow in pixels) captions wrap onto multiple lines and never overlap
-      // their neighbors, while at high zoom (box wide) each line fits on one line.
       viewer.addOverlay({
         element: el,
         location: new OpenSeadragon.Rect(bounds.x, bounds.y + bounds.height + 0.04, bounds.width, 0.3),
