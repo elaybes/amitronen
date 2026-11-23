@@ -1,0 +1,129 @@
+{
+  "title_en": "26merge2",
+  "title_he": "",
+  "curator_mode": true,
+  "show_rotate_tip": true,
+  "images": [
+    {
+      "id": "fe750b5c-13e5-4648-b446-53b0c503bc0f",
+      "dzi": "tiles/fe750b5c-13e5-4648-b446-53b0c503bc0f.dzi",
+      "preview": "tiles/fe750b5c-13e5-4648-b446-53b0c503bc0f_preview.jpg",
+      "caption_en": "A",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "62e5d423-bf40-40a6-bae6-fa81522c878b",
+      "dzi": "tiles/62e5d423-bf40-40a6-bae6-fa81522c878b.dzi",
+      "preview": "tiles/62e5d423-bf40-40a6-bae6-fa81522c878b_preview.jpg",
+      "caption_en": "B",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "785e94bb-980b-4a13-8464-53256d1c76c7",
+      "dzi": "tiles/785e94bb-980b-4a13-8464-53256d1c76c7.dzi",
+      "preview": "tiles/785e94bb-980b-4a13-8464-53256d1c76c7_preview.jpg",
+      "caption_en": "C",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "efe34979-c3b1-4fb0-bcf8-51fa3d48ace4",
+      "dzi": "tiles/efe34979-c3b1-4fb0-bcf8-51fa3d48ace4.dzi",
+      "preview": "tiles/efe34979-c3b1-4fb0-bcf8-51fa3d48ace4_preview.jpg",
+      "caption_en": "D",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "ed4b5d1c-99d9-44ba-bb14-41100ae57557",
+      "dzi": "tiles/ed4b5d1c-99d9-44ba-bb14-41100ae57557.dzi",
+      "preview": "tiles/ed4b5d1c-99d9-44ba-bb14-41100ae57557_preview.jpg",
+      "caption_en": "E",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "fbdca9f3-1252-4242-adf7-8d2b263c6675",
+      "dzi": "tiles/fbdca9f3-1252-4242-adf7-8d2b263c6675.dzi",
+      "preview": "tiles/fbdca9f3-1252-4242-adf7-8d2b263c6675_preview.jpg",
+      "caption_en": "F",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "83e44e13-3985-4ff8-9772-bf4e6e6ed3bb",
+      "dzi": "tiles/83e44e13-3985-4ff8-9772-bf4e6e6ed3bb.dzi",
+      "preview": "tiles/83e44e13-3985-4ff8-9772-bf4e6e6ed3bb_preview.jpg",
+      "caption_en": "G",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "2e6007be-02ee-4642-b079-ca9ca95e9c82",
+      "dzi": "tiles/2e6007be-02ee-4642-b079-ca9ca95e9c82.dzi",
+      "preview": "tiles/2e6007be-02ee-4642-b079-ca9ca95e9c82_preview.jpg",
+      "caption_en": "H",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "cab83c42-56f9-4e33-a7dd-6943319506ee",
+      "dzi": "tiles/cab83c42-56f9-4e33-a7dd-6943319506ee.dzi",
+      "preview": "tiles/cab83c42-56f9-4e33-a7dd-6943319506ee_preview.jpg",
+      "caption_en": "I",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "cfb4767e-6550-41e9-b57f-c893d8fdc8ab",
+      "dzi": "tiles/cfb4767e-6550-41e9-b57f-c893d8fdc8ab.dzi",
+      "preview": "tiles/cfb4767e-6550-41e9-b57f-c893d8fdc8ab_preview.jpg",
+      "caption_en": "J",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    },
+    {
+      "id": "d4f2210f-659e-4c49-b355-9226b6cd42fb",
+      "dzi": "tiles/d4f2210f-659e-4c49-b355-9226b6cd42fb.dzi",
+      "preview": "tiles/d4f2210f-659e-4c49-b355-9226b6cd42fb_preview.jpg",
+      "caption_en": "K",
+      "caption_he": "",
+      "medium_en": "",
+      "medium_he": "",
+      "dimensions": "",
+      "curator_label": ""
+    }
+  ]
+}
